@@ -8,33 +8,59 @@ import { v1 as uuid } from "uuid";
 //showing vs code github setup
 class App extends Component {
   state = {
-    items: [
-      { id: 1, title: 'wake up' },
-      { id: 2, title: 'make breakfast' }
-    ],
+    items: [],
     id: uuid(),
-    item: '',
+    item: "",
     editItem: false
   };
 
-  handleChange = (e) => {
-    console.log('handleChangee');
+  handleChange = e => {
+    this.setState({
+      item: e.target.value
+    });
   }
-  handleSubmit = (e) => {
-    console.log('handleSubmit');
-  }
+  handleSubmit = e => {
+    e.preventDefault();
+    const newItem = {
+      id: this.state.id,
+      title: this.state.item
+    }
+    const updatedItems = [...this.state.items, newItem]
 
+    this.setState({
+      items: updatedItems,
+      item: '',
+      id: uuid(),
+      editItem: false
+    }
+    );
+  };
   clearList = () => {
-    console.log('clear list');
+    this.setState({
+      items: []
+    });
   }
 
   handleDelete = (id) => {
-    console.log(`handle delete ${id}`);
+    const filteredItems = this.state.items.filter
+      (item => item.id !== id);
+    this.setState({
+      items: filteredItems
+    });
   }
 
   handleEdit = (id) => {
-    console.log(`handle edit ${id}`);
-  }
+    const filteredItems = this.state.items.filter
+      (item => item.id !== id);
+    const selectedItem = this.state.items.find(item => item.id === id);
+    this.setState({
+      items: filteredItems,
+      item: selectedItem.title,
+      id: id,
+      editItem: true
+    })
+  };
+
   render() {
     return (
       <div className="container">
